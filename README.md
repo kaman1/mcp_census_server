@@ -1,49 +1,63 @@
-# Census MCP Server
+# MCP Census Server
 
-This is a Model Context Protocol (MCP) server that provides a tool for retrieving data from the United States Census Bureau API.
+A robust Model Context Protocol (MCP) server for accessing US Census Bureau data via JSON-RPC over HTTP.
 
-## Requirements
+## Features
 
-- Python 3.7 or higher
-- No external Python dependencies (uses standard library)
-- Set environment variable `CENSUS_API_KEY` to your Census Bureau API key.
+- JSON-RPC 2.0 (single and batch requests)
+- Pydantic models for request/response validation
+- Caching of Census API responses (TTL 5 minutes)
+- Structured logging (via Python `logging`)
+- API key authentication via `X-API-Key` header
+- Health check endpoint (`/health`)
+- Interactive API docs (Swagger UI available at `/docs`)
+- MCP methods:
+  - `initialize`: negotiate protocol version and capabilities
+  - `notifications/initialized`: client ready notification
+  - `tools/list`: list available tools (`census/get`)
+  - `tools/call`: invoke `census/get` to retrieve Census Bureau data
 
-## Usage
+## Quickstart
 
-1. Export your Census API key:
+1. Clone the repository and enter the directory:
    ```bash
-   export CENSUS_API_KEY=your_api_key_here
+   git clone https://github.com/kaman1/mcp_census_server.git
+   cd mcp_census_server
    ```
-2. Run the server:
+2. Copy the environment template and set your keys:
    ```bash
-   python server.py
+   cp .env.example .env
+   # Edit .env:
+   # CENSUS_API_KEY=<your_census_api_key>
+   # SERVER_API_KEY=<your_mcp_server_secret_key>
    ```
-   By default, the server listens on port 8000. To change the port:
+3. Install dependencies:
    ```bash
-   export PORT=9000
-   python server.py
+   pip install -r requirements.txt
    ```
+4. Start the server:
+   ```bash
+   uvicorn app:app --host 0.0.0.0 --port 8000 --reload
+   ```
+5. Send JSON-RPC requests to `http://localhost:8000/` with header `X-API-Key: <SERVER_API_KEY>`.
 
-## JSON-RPC Methods
+Example `tools/list` call:
+```bash
+curl -X POST http://localhost:8000/ \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: $SERVER_API_KEY" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+```
 
-- **initialize**: Handshake to negotiate protocol version and capabilities.
-- **notifications/initialized**: Notification that the client is ready.
-- **tools/list**: Returns the list of available tools, including `census/get`.
-- **tools/call**: Invoke the `census/get` tool to fetch data. Example:
-  ```json
-  {
-    "jsonrpc": "2.0",
-    "id": 3,
-    "method": "tools/call",
-    "params": {
-      "name": "census/get",
-      "arguments": {
-        "year": 2020,
-        "dataset": "acs/acs5",
-        "get": ["P001001"],
-        "for": "state:06"
-      }
-    }
-  }
-  ```
-The response `result.content[0].text` contains the JSON response from the Census API.
+## Development
+
+- **Tests**: `pytest`
+- **Formatting**: `black .`
+- **Imports**: `isort .`
+- **Linting**: `flake8 .`
+- CI pipeline configured in `.github/workflows/ci.yml`
+
+## Documentation
+
+- **Architecture**: `docs/architecture.md`
+- **Usage Examples**: `docs/usage.md`
