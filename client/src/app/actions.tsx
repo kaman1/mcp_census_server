@@ -69,11 +69,16 @@ export async function continueConversation(history: Message[]) {
               arguments: { year, dataset, get, for: geo, key },
             },
           };
-          const res = await fetch(`${process.env.NEXT_PUBLIC_MCP_SERVER_URL}/`, {
+          const baseUrl =
+            process.env.NEXT_PUBLIC_MCP_SERVER_URL || window.location.origin;
+          const res = await fetch(`${baseUrl}/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'X-API-Key': process.env.NEXT_PUBLIC_SERVER_API_KEY || '',
+            'X-API-Key':
+              (typeof window !== 'undefined' && localStorage.getItem('mcp-api-key')) ||
+              process.env.NEXT_PUBLIC_SERVER_API_KEY ||
+              '',
             },
             body: JSON.stringify(body),
           });

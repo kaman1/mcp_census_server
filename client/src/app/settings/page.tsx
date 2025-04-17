@@ -4,7 +4,12 @@ import { Button } from '@/components/ui/button';
 
 export default function SettingsPage() {
   const [health, setHealth] = useState<string>('Checking...');
-  const [apiKey, setApiKey] = useState<string>('');
+  const [apiKey, setApiKey] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('mcp-api-key') || '';
+    }
+    return '';
+  });
   const [copied, setCopied] = useState<boolean>(false);
 
   useEffect(() => {
@@ -25,6 +30,9 @@ export default function SettingsPage() {
     const key = crypto.randomUUID();
     setApiKey(key);
     setCopied(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('mcp-api-key', key);
+    }
   };
 
   const copyToClipboard = () => {
