@@ -10,14 +10,20 @@ export async function Header() {
     <header className="sticky top-0 z-50 flex items-center justify-between w-full h-16 px-4 border-b shrink-0 bg-white ">  
       <EnvCard />
       <Link href="/" rel="nofollow" className="mr-2 font-bold">
-        Next.js AI Lite
+        MCP Client
       </Link>
       <IconSeparator />
       <Link
         href="/genui"
-        className={cn(buttonVariants({ variant: 'link' }), "mr-auto font-normal")}
+        className={cn(buttonVariants({ variant: 'link' }), "mr-2 font-normal")}
       >
         <span className="hidden md:flex">GenUI</span>
+      </Link>
+      <Link
+        href="/settings"
+        className={cn(buttonVariants({ variant: 'link' }), "mr-auto font-normal")}
+      >
+        Settings
       </Link>
       <Link
         href="https://vercel.com/new"
