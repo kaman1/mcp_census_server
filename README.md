@@ -61,3 +61,17 @@ curl -X POST http://localhost:8000/ \
 
 - **Architecture**: `docs/architecture.md`
 - **Usage Examples**: `docs/usage.md`
+
+## Hosted Documentation
+
+You can publish these docs via GitHub Pages:
+
+1. In your GitHub repository, go to **Settings** > **Pages**.
+2. Under **Source**, choose the **main** branch and `/docs` folder.
+3. Click **Save**.
+
+The docs will be available at:
+
+    https://<username>.github.io/mcp_census_server/
+
+You can add this URL in the repository **About** section as the project website.
