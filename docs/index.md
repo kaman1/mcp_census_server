@@ -1,10 +1,13 @@
 # ---
-# title: Home
-# ---
-# 
-# MCP Census Server Documentation
+title: Intro
+---
 
-Welcome to the MCP Census Server documentation.
+# MCP Census Server
 
-- [Architecture](architecture.md)
+Welcome to the MCP Census Server documentation site! Use the navigation menu to explore:
+
+- [About](about.md)
+- [How to Run](howto.md)
+- [Authentication](authentication.md)
 - [Usage](usage.md)
+- [Architecture](architecture.md)

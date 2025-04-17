@@ -4,26 +4,35 @@ import { Button } from '@/components/ui/button';
 
 export default function SettingsPage() {
   const [health, setHealth] = useState<string>('Checking...');
-  const [apiKey, setApiKey] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('mcp-api-key') || '';
-    }
-    return '';
-  });
+  // API key stored in localStorage; initial state empty to avoid SSR/client mismatch
+  const [apiKey, setApiKey] = useState<string>('');
   const [copied, setCopied] = useState<boolean>(false);
 
+  // On mount, check server health
   useEffect(() => {
     const url = process.env.NEXT_PUBLIC_MCP_SERVER_URL;
     if (!url) {
       setHealth('No MCP_SERVER_URL configured');
       return;
     }
-    fetch('/api/health')
+    // Fetch health endpoint directly to avoid rewrite issues
+    fetch(`${url}/health`, {
+      headers: {
+        'X-API-Key': process.env.NEXT_PUBLIC_SERVER_API_KEY || '',
+      },
+    })
       .then((res) => {
         if (res.ok) setHealth('Connected');
         else setHealth(`Error ${res.status}`);
       })
-      .catch((_) => setHealth('Disconnected'));
+      .catch(() => setHealth('Disconnected'));
+  }, []);
+  // Load stored API key from localStorage after mount to prevent hydration mismatch
+  useEffect(() => {
+    const stored = localStorage.getItem('mcp-api-key');
+    if (stored) {
+      setApiKey(stored);
+    }
   }, []);
 
   const generateKey = () => {

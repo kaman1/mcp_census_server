@@ -1,5 +1,8 @@
 import os
+import sys
 import pytest
+# Ensure the server root is in sys.path for imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir)))
 from fastapi.testclient import TestClient
 
 import app
