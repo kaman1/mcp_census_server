@@ -73,12 +73,22 @@ export async function continueConversation(history: Message[]) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-            'X-API-Key': process.env.NEXT_PUBLIC_SERVER_API_KEY || '',
+              'X-API-Key': process.env.NEXT_PUBLIC_SERVER_API_KEY || '',
             },
             body: JSON.stringify(body),
           });
           const json = await res.json();
           const text = json.result?.content?.[0]?.text;
+          // Stream JSON response in UI
+          try {
+            stream.done(
+              <pre className="whitespace-pre-wrap font-mono">
+                {JSON.stringify(json, null, 2)}
+              </pre>
+            );
+          } catch {
+            // ignore if stream not available
+          }
           return text || JSON.stringify(json);
         },
       },
