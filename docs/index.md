@@ -1,3 +1,7 @@
+# ---
+# title: Home
+# ---
+# 
 # MCP Census Server Documentation
 
 Welcome to the MCP Census Server documentation.

@@ -61,6 +61,12 @@ curl -X POST http://localhost:8000/ \
 
 - **Architecture**: `docs/architecture.md`
 - **Usage Examples**: `docs/usage.md`
+- **Authentication**: `docs/authentication.md`
+- **Styled Documentation (MDX + Mintlify)**:
+  ```bash
+  npm install
+  npm run serve:docs
+  ```
 
 ## Hosted Documentation
 

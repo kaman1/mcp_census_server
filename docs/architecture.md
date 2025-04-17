@@ -1,5 +1,9 @@
-#+ Architecture
-+
+---
+title: Architecture
+---
+
+# Architecture
+
 This document outlines the design and architecture of the MCP Census Server.
 +
 ## Overview

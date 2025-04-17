@@ -22,16 +22,15 @@ logger = logging.getLogger("mcp_census_server")
 from dotenv import load_dotenv
 
 load_dotenv()
-CENSUS_API_KEY = os.getenv("CENSUS_API_KEY")
-SERVER_API_KEY = os.getenv("SERVER_API_KEY")
-
-if not SERVER_API_KEY:
-    logger.error("SERVER_API_KEY is not set in environment")
-    raise RuntimeError("SERVER_API_KEY missing")
+# API keys are read from environment at runtime: SERVER_API_KEY, CENSUS_API_KEY
 
 
 async def verify_api_key(x_api_key: str = Header(...)):
-    if x_api_key != SERVER_API_KEY:
+    server_api_key = os.getenv("SERVER_API_KEY")
+    if not server_api_key:
+        logger.error("SERVER_API_KEY is not configured")
+        raise HTTPException(status_code=500, detail="Server configuration error")
+    if x_api_key != server_api_key:
         logger.warning("Unauthorized access attempt with API key: %s", x_api_key)
         raise HTTPException(status_code=401, detail="Unauthorized")
     return True
@@ -169,7 +168,7 @@ async def handle_rpc(req: JSONRPCRequest) -> JSONRPCResponse:
         dataset = args["dataset"]
         get_vars = args["get"]
         geo = args["for"]
-        key = args.get("key") or CENSUS_API_KEY
+        key = args.get("key") or os.getenv("CENSUS_API_KEY")
         if not key:
             return JSONRPCResponse(
                 id=req.id,

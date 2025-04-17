@@ -1,5 +1,9 @@
-#+ Usage Examples
-+
+---
+title: Usage
+---
+
+# Usage
+
 This document provides example workflows for using the MCP Census Server.
 +
 ## Initialization

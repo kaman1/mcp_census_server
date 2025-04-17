@@ -1,0 +1,11 @@
+{
+  "name": "mcp-census-server-docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve:docs": "cd docs && mintlify dev"
+  },
+  "devDependencies": {
+    "mintlify": "^4.0.468"
+  }
+}
