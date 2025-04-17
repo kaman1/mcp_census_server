@@ -8,7 +8,7 @@ First, copy environment variables and run the development server:
 yarn dev
 ```bash
 cp .env.example .env.local
-# Fill in OPENAI_API_KEY, MCP_SERVER_URL, SERVER_API_KEY in .env.local
+# Fill in OPENAI_API_KEY, NEXT_PUBLIC_MCP_SERVER_URL, NEXT_PUBLIC_SERVER_API_KEY in .env.local
 npm install
 npm run dev
 ```

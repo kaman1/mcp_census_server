@@ -69,11 +69,11 @@ export async function continueConversation(history: Message[]) {
               arguments: { year, dataset, get, for: geo, key },
             },
           };
-          const res = await fetch(`${process.env.MCP_SERVER_URL}/`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_MCP_SERVER_URL}/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'X-API-Key': process.env.SERVER_API_KEY || '',
+            'X-API-Key': process.env.NEXT_PUBLIC_SERVER_API_KEY || '',
             },
             body: JSON.stringify(body),
           });

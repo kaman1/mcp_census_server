@@ -23,12 +23,12 @@ pushd client > /dev/null
 if [ ! -f .env.local ]; then
   cp .env.example .env.local
   read -p "Enter OPENAI_API_KEY: " OPENAI_API_KEY
-  read -p "Enter MCP_SERVER_URL (e.g. http://localhost:8000): " MCP_SERVER_URL
-  read -p "Enter SERVER_API_KEY for client: " CLIENT_SERVER_API_KEY
+  read -p "Enter NEXT_PUBLIC_MCP_SERVER_URL (e.g. http://localhost:8000): " NEXT_PUBLIC_MCP_SERVER_URL
+  read -p "Enter NEXT_PUBLIC_SERVER_API_KEY for client: " CLIENT_SERVER_API_KEY
   cat <<EOF >> .env.local
 OPENAI_API_KEY=$OPENAI_API_KEY
-MCP_SERVER_URL=$MCP_SERVER_URL
-SERVER_API_KEY=$CLIENT_SERVER_API_KEY
+NEXT_PUBLIC_MCP_SERVER_URL=$NEXT_PUBLIC_MCP_SERVER_URL
+NEXT_PUBLIC_SERVER_API_KEY=$CLIENT_SERVER_API_KEY
 EOF
   echo ".env.local created for client."
 else
