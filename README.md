@@ -81,3 +81,23 @@ The docs will be available at:
     https://<username>.github.io/mcp_census_server/
 
 You can add this URL in the repository **About** section as the project website.
+
+## Client Application
+
+The `client/` directory contains a Next.js-based MCP client that can interact with this server.
+
+1. Change into the client folder:
+   ```bash
+   cd client
+   ```
+2. Copy the example environment file and fill in your keys and server URL:
+   ```bash
+   cp .env.example .env.local
+   # Set OPENAI_API_KEY, MCP_SERVER_URL (e.g. https://your-server), SERVER_API_KEY
+   ```
+3. Install dependencies and start the development server:
+   ```bash
+   npm install
+   npm run dev
+   ```
+4. Open [http://localhost:3000](http://localhost:3000) to use the client UI.
