@@ -66,7 +66,7 @@ export default function Chat() {
                   className="w-[95%] mr-2 border-0 ring-offset-0 focus-visible:ring-0 focus-visible:outline-none focus:outline-none focus:ring-0 ring-0 focus-visible:border-none border-transparent focus:border-transparent focus-visible:ring-none"
                   placeholder='Ask me anything...'
                 />
-                <Button disabled={!input.trim()}>
+                <Button type="submit" disabled={!input.trim()}>
                   <IconArrowUp />
                 </Button>
               </div>
