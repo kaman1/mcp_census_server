@@ -71,7 +71,7 @@ export async function continueConversation(history: Message[]) {
           };
           const baseUrl =
             process.env.NEXT_PUBLIC_MCP_SERVER_URL || window.location.origin;
-          const res = await fetch(`${baseUrl}/`, {
+          const res = await fetch(`/api/`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

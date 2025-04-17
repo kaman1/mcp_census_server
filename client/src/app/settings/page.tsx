@@ -18,7 +18,7 @@ export default function SettingsPage() {
       setHealth('No MCP_SERVER_URL configured');
       return;
     }
-    fetch(`${url}/health`)
+    fetch('/api/health')
       .then((res) => {
         if (res.ok) setHealth('Connected');
         else setHealth(`Error ${res.status}`);
