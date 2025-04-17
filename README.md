@@ -101,3 +101,12 @@ The `client/` directory contains a Next.js-based MCP client that can interact wi
    npm run dev
    ```
 4. Open [http://localhost:3000](http://localhost:3000) to use the client UI.
+
+## Quick Start Script
+
+You can configure environments and launch both server and client in one step:
+```bash
+chmod +x start.sh
+./start.sh
+```
+This will prompt for all required keys and run the MCP server and client concurrently.
