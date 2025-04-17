@@ -61,7 +61,12 @@ class JSONRPCResponse(BaseModel):
 cache = TTLCache(maxsize=100, ttl=300)
 
 
-@cached(cache)
+def _cache_key(func, url: str, params: Dict[str, Any]):
+    # Create a hashable key based on URL and sorted params
+    items = tuple(sorted(params.items()))
+    return (url, items)
+
+@cached(cache, key=_cache_key)
 def fetch_census_data(url: str, params: Dict[str, Any]) -> List[Any]:
     logger.debug("Fetching Census data: url=%s params=%s", url, params)
     with httpx.Client(timeout=10) as client:
