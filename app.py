@@ -131,20 +131,22 @@ async def handle_rpc(req: JSONRPCRequest) -> JSONRPCResponse:
     # tools/list
     if method == "tools/list":
         tools = [
-            {
-                "name": "census/get",
-                "description": "Retrieve data from the US Census Bureau API",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "year": {"type": "integer"},
-                        "dataset": {"type": "string"},
-                        "get": {"type": "array", "items": {"type": "string"}},
-                        "for": {"type": "string"},
-                    },
-                    "required": ["year", "dataset", "get", "for"],
+        {
+            "name": "census/get",
+            "description": "Retrieve data from the US Census Bureau API",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "year": {"type": "integer"},
+                    "dataset": {"type": "string"},
+                    "variables": {"type": "array", "items": {"type": "string"}},
+                    "for": {"type": "string"},
+                    "startYear": {"type": "integer"},
+                    "endYear": {"type": "integer"},
                 },
-            }
+                "required": ["year", "dataset", "variables", "for"],
+            },
+        }
         ]
         return JSONRPCResponse(id=req.id, result={"tools": tools})
     # tools/call
@@ -164,26 +166,48 @@ async def handle_rpc(req: JSONRPCRequest) -> JSONRPCResponse:
                     code=-32602, message=f"Missing parameters: {missing}"
                 ),
             )
-        year = args["year"]
-        dataset = args["dataset"]
-        get_vars = args["get"]
-        geo = args["for"]
+        # Extract and validate parameters
+        year = args.get("year")
+        dataset = args.get("dataset")
+        variables = args.get("variables", [])
+        geo = args.get("for")
         key = args.get("key") or os.getenv("CENSUS_API_KEY")
-        if not key:
+        # Check required
+        if not all([year, dataset, variables, geo]):
             return JSONRPCResponse(
                 id=req.id,
-                result={
-                    "content": [
-                        {"type": "text", "text": "Census API key not provided"}
-                    ],
-                    "isError": True,
-                },
+                error=JSONRPCError(
+                    code=-32602,
+                    message="Missing parameters: year, dataset, variables, or for",
+                ),
             )
-        url = f"https://api.census.gov/data/{year}/{dataset}"
+        # Map dataset to actual API path and handle ACS5 variable overrides
+        if dataset == "acs5":
+            formatted = "acs/acs5"
+            final_vars = list(variables)
+            # Use proven ACS5 variables if any DP* variables present
+            if any(v.startswith("DP") for v in final_vars):
+                final_vars = [
+                    "B01003_001E",
+                    "B19013_001E",
+                    "B23025_004E",
+                    "B23025_005E",
+                    "B19001_001E",
+                ]
+        elif dataset == "cbp":
+            formatted = "cbp"
+            final_vars = list(variables)
+        else:
+            formatted = dataset
+            final_vars = list(variables)
+        # Build URL and fetch
+        url = f"https://api.census.gov/data/{year}/{formatted}"
         try:
             data = fetch_census_data(
-                url, {"get": ",".join(get_vars), "for": geo, "key": key}
+                url,
+                {"get": ",".join(final_vars), "for": geo, "key": key},
             )
+            # Respond with JSON data
             content = [{"type": "text", "text": json.dumps(data)}]
             return JSONRPCResponse(
                 id=req.id, result={"content": content, "isError": False}
