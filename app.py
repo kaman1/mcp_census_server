@@ -75,7 +75,7 @@ app = FastAPI(title="MCP Census Server", docs_url="/docs", openapi_url="/openapi
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["POST"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
