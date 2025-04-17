@@ -49,7 +49,7 @@ export async function continueConversation(history: Message[]) {
           return `Here's the weather for ${city}!`;
         },
       },
-      censusGet: {
+        censusGet: {
         description: 'Retrieve data from the US Census Bureau via MCP server.',
         parameters: z.object({
           year: z.number().int().describe('Year of the census data, e.g. 2020'),
@@ -71,7 +71,12 @@ export async function continueConversation(history: Message[]) {
           };
           const baseUrl =
             process.env.NEXT_PUBLIC_MCP_SERVER_URL || window.location.origin;
-          const res = await fetch(`/api/`, {
+          // Handle server-side vs. client-side execution for correct URL
+          const isServer = typeof window === 'undefined';
+          const endpoint = isServer
+            ? `${process.env.NEXT_PUBLIC_MCP_SERVER_URL}/`
+            : '/api/';
+          const res = await fetch(endpoint, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
